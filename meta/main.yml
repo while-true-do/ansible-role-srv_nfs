@@ -1,0 +1,38 @@
+---
+# meta file for while_true_do.srv_nfs
+
+galaxy_info:
+  role_name: srv_nfs
+  author: while-true-do.io
+  description: A role to install and configure nfs.
+  license: BSD
+
+  min_ansible_version: 2.7
+
+  # Supported platforms: https://galaxy.ansible.com/api/v1/platforms/
+  # Please also maintain
+  # - molecule/default/molecule.yml
+  # - molecule/default/tests/*
+  # - .travis.yml
+  platforms:
+    - name: EL
+      versions:
+        - 7
+
+    - name: Fedora
+      versions:
+        - 29
+        - 30
+
+  # Some very common tags are:
+  # system, virtualization, development, monitoring, packaging, container
+  # configuration, cloud, security
+  galaxy_tags:
+    - nfs
+    - system
+    - package
+    - security
+    - file
+    - configuration
+
+dependencies: []

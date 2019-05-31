@@ -1,0 +1,56 @@
+---
+# tasks file for while_true_do.srv_nfs
+
+- name: Manage nfs Packages
+  package:
+    name: "{{ wtd_srv_nfs_package }}"
+    state: "{{ wtd_srv_nfs_package_state }}"
+  become: true
+  tags:
+    - nfs
+    - package
+
+- name: Include nfs Export Configuration
+  include_tasks: server-exports.yml
+  loop: "{{ wtd_srv_nfs_conf_exports }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - wtd_srv_nfs_package_state != "absent"
+  tags:
+    - nfs
+    - configuration
+
+- name: Manage nfs Service
+  service:
+    name: "{{ wtd_srv_nfs_service }}"
+    state: "{{ wtd_srv_nfs_service_state }}"
+    enabled: "{{ wtd_srv_nfs_service_enabled }}"
+  become: true
+  when:
+    - wtd_srv_nfs_package_state != "absent"
+    - ansible_virtualization_type != "docker"
+  tags:
+    - nfs
+    - service
+
+- name: Gather package facts
+  package_facts:
+    manager: auto
+  tags:
+    - nfs
+    - package
+
+- name: Manage srv_nfs FW Service
+  firewalld:
+    service: "{{ wtd_srv_nfs_fw_service }}"
+    state: "{{ wtd_srv_nfs_fw_state }}"
+    zone: "{{ wtd_srv_nfs_fw_zone }}"
+  become: true
+  when:
+    - '"firewalld" in packages'
+    - wtd_srv_nfs_fw_mgmt
+  tags:
+    - srv_nfs
+    - security
+    - firewall

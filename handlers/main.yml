@@ -1,0 +1,11 @@
+---
+# handlers file for while_true_do.srv_nfs
+#
+- name: Restart nfs
+  service:
+    name: ""
+    state: "restarted"
+  become: true
+  tags:
+    - nfs
+    - service

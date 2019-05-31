@@ -1,0 +1,18 @@
+---
+# tasks file for while_true_do.srv_nfs
+
+- name: Include nfs distribution vars
+  include_vars: "{{ ansible_distribution }}.yml"
+  tags:
+    - nfs
+    - package
+    - service
+
+- name: Include nfs role Tasks
+  include_tasks: "{{ wtd_srv_nfs_role }}.yml"
+  tags:
+    - nfs
+    - client
+    - server
+    - package
+    - service
