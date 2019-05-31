@@ -4,7 +4,7 @@
 galaxy_info:
   role_name: srv_nfs
   author: while-true-do.io
-  description: A role to install and configure nfs.
+  description: An Ansible Role to install and configure nfs.
   license: BSD
 
   min_ansible_version: 2.7

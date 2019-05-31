@@ -20,7 +20,7 @@ license: BSD-3-Clause
 
 # Ansible Role: srv_nfs
 
-A role to install and configure nfs.
+An Ansible Role to install and configure nfs.
 
 ## Motivation
 
