@@ -86,7 +86,7 @@ wtd_srv_nfs_conf_exports: []
 #   mode: "0750"                # default: 0750
 #   hosts:
 #     - host: "192.168.0.1"
-#       option: "rw,sync"       # default: sync
+#       options: "rw,sync"       # default: sync
 #     - host: "192.168.10.0/24"
 
 ## Service Management
@@ -129,9 +129,19 @@ can be done in a
     wtd_srv_nfs_conf_exports:
       - name: "nfs"
         path: "/var/lib/nfs/"
+        mode: 0755
         hosts:
           - host: "192.168.0.1"
           - host: "192.168.0.2"
+     - name: "tftpboot"
+       path: "/var/lib/tftpboot"
+       owner: "root"
+       group: "root"
+       mode: 0755
+       hosts:
+         - hosts: "192.168.0.101"
+           options: "rw,sync"
+         - hosts: "192.168.0.102"
 ```
 
 ## Known Issues
