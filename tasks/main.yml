@@ -2,17 +2,76 @@
 # tasks file for while_true_do.srv_nfs
 
 - name: Include nfs distribution vars
-  include_vars: "{{ ansible_distribution }}.yml"
+  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
   tags:
     - nfs
     - package
     - service
 
-- name: Include nfs role Tasks
-  include_tasks: "{{ wtd_srv_nfs_role }}.yml"
+- name: Manage nfs Packages
+  package:
+    name: "{{ wtd_srv_nfs_package }}"
+    state: "{{ wtd_srv_nfs_package_state }}"
+  become: true
   tags:
     - nfs
-    - client
-    - server
     - package
+
+- name: Manage nfs exports Folder
+  file:
+    path: "{{ item.path }}"
+    state: "directory"
+    owner: "{{ item.owner | default('nobody') }}"
+    group: "{{ item.group | default('nobody') }}"
+    mode: "{{ item.mode | default('0750') }}"
+  become: true
+  loop: "{{ wtd_srv_nfs_conf_exports }}"
+  when:
+    - wtd_srv_nfs_package_state != "absent"
+  tags:
+    - nfs
+    - configuration
+
+- name: Manage nfs exports Configuration
+  template:
+    src: "exports_d.j2"
+    dest: "/etc/exports.d/{{ item.name }}.exports"
+  become: true
+  notify: "Reload nfs Service"
+  when:
+    - wtd_srv_nfs_package_state != "absent"
+    - item.hosts is defined
+  loop: "{{ wtd_srv_nfs_conf_exports }}"
+  tags:
+    - nfs
+    - configuration
+
+- name: Manage nfs Service
+  service:
+    name: "{{ item }}"
+    state: "{{ wtd_srv_nfs_service_state }}"
+    enabled: "{{ wtd_srv_nfs_service_enabled }}"
+  become: true
+  loop: "{{ wtd_srv_nfs_service }}"
+  when:
+    - ansible_virtualization_type == "docker"
+    - wtd_srv_nfs_package_state != "absent"
+  tags:
+    - nfs
     - service
+
+- name: Manage nfs FW Service
+  firewalld:
+    service: "{{ item }}"
+    state: "{{ wtd_srv_nfs_fw_state }}"
+    zone: "{{ wtd_srv_nfs_fw_zone }}"
+    immediate: true
+    permanent: true
+  become: true
+  when:
+    - wtd_srv_nfs_fw_mgmt
+  loop: "{{ wtd_srv_nfs_fw_service }}"
+  tags:
+    - nfs
+    - security
+    - firewall

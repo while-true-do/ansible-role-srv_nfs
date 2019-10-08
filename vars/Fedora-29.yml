@@ -2,4 +2,7 @@
 # vars file for while_true_do.srv_nfs
 
 wtd_srv_nfs_package: "nfs-utils"
-wtd_srv_nfs_service: "nfs"
+wtd_srv_nfs_service: "nfs-server"
+wtd_srv_nfs_fw_service:
+  - nfs3
+  - nfs
