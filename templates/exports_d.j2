@@ -1,2 +1,2 @@
 {{ ansible_managed | comment }}
-{{ item.path }}{% for i in item.hosts %} {{ i.host }}({{ i.options|default('sync') }}){% endfor %}
+{{ item.path }}{% for i in item.hosts %} {{ i.host }}({{ i.options | default('sync') }}){% endfor %}

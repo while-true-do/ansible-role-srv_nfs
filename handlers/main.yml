@@ -1,11 +1,14 @@
 ---
 # handlers file for while_true_do.srv_nfs
-#
-- name: Restart nfs
+
+- name: Reload nfs Service
   service:
-    name: ""
+    name: "{{ item }}"
     state: "restarted"
   become: true
+  loop: "{{ wtd_srv_nfs_service }}"
+  when:
+    - ansible_virtualization_type != "docker"
   tags:
     - nfs
     - service

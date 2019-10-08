@@ -32,7 +32,7 @@ This role installs and configures nfs and nfs exports.
 
 - install nfs packages
 - start nfs services
-- take care of firewalld
+- take care of firewalld (optional)
 - create export directories
 - configure exports
 
@@ -66,11 +66,8 @@ git clone https://github.com/while-true-do/ansible-role-srv_nfs.git while_true_d
 ---
 # defaults file for while_true_do.srv_nfs
 
-## Role Management
-# Role can be client|server
-wtd_srv_nfs_role: "server"
-
 ## Package Management
+# Defaults are based on Fedora
 wtd_srv_nfs_package: "nfs-utils"
 # State can be present|latest|absent
 wtd_srv_nfs_package_state: "present"
@@ -86,7 +83,7 @@ wtd_srv_nfs_conf_exports: []
 #   mode: "0750"                # default: 0750
 #   hosts:
 #     - host: "192.168.0.1"
-#       options: "rw,sync"       # default: sync
+#       options: "rw,sync"      # default: sync
 #     - host: "192.168.10.0/24"
 
 ## Service Management

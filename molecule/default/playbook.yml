@@ -3,6 +3,7 @@
   hosts: all
   roles:
     - role: while_true_do.srv_nfs
+      wtd_srv_nfs_fw_mgmt: false
       wtd_srv_nfs_conf_exports:
         - name: "testshare"
           path: "/testshare"
