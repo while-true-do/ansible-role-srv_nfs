@@ -54,7 +54,7 @@
   become: true
   loop: "{{ wtd_srv_nfs_service }}"
   when:
-    - ansible_virtualization_type == "docker"
+    - ansible_virtualization_type != "docker"
     - wtd_srv_nfs_package_state != "absent"
   tags:
     - nfs
